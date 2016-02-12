@@ -1,7 +1,9 @@
 package storm.benchmark;
 
 import org.apache.storm.Config;
+import org.apache.storm.LocalCluster;
 import org.apache.storm.StormSubmitter;
+import org.apache.storm.generated.StormTopology;
 import org.apache.storm.spout.SpoutOutputCollector;
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.BasicOutputCollector;
@@ -12,6 +14,8 @@ import org.apache.storm.topology.base.BaseRichSpout;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
+import org.apache.storm.utils.Utils;
+
 import java.util.Map;
 import java.util.Random;
 
@@ -95,13 +99,13 @@ public class ThroughputTest {
     }
     
     
-    //storm jar storm-benchmark-0.0.1-SNAPSHOT-standalone.jar storm.benchmark.ThroughputTest demo 100 8 8 8 10000
+    //storm jar storm-benchmark-0.0.1-SNAPSHOT-standalone.jar storm.benchmark.ThroughputTest demo 1000000 8 8 8 10000
     public static void main(String[] args) throws Exception {
         int size = Integer.parseInt(args[1]);
         int workers = Integer.parseInt(args[2]);
         int spout = Integer.parseInt(args[3]);
         int bolt = Integer.parseInt(args[4]);        
-        int maxPending = Integer.parseInt(args[5]);
+        //int maxPending = Integer.parseInt(args[5]);
 
         TopologyBuilder builder = new TopologyBuilder();
         builder.setSpout("spout", new GenSpout(size), spout);
@@ -109,8 +113,7 @@ public class ThroughputTest {
 //                .fieldsGrouping("bolt", new Fields("id"));
 //        builder.setBolt("bolt", new IdentityBolt(), bolt)
 //                .shuffleGrouping("spout");
-        builder.setBolt("bolt2", new AckBolt(), bolt)
-               .shuffleGrouping("spout");
+        builder.setBolt("bolt2", new AckBolt(), bolt).shuffleGrouping("spout");
 //        builder.setBolt("count2", new CountBolt(), bolt)
 //                .fieldsGrouping("bolt2", new Fields("id"));
         
@@ -127,7 +130,13 @@ public class ThroughputTest {
         //conf.put("topology.transfer.buffer.size", 8);
         //conf.put("topology.receiver.buffer.size", 8);
         //conf.put(Config.TOPOLOGY_WORKER_CHILDOPTS, "-Xdebug -Xrunjdwp:transport=dt_socket,address=1%ID%,server=y,suspend=n");
-        
-        StormSubmitter.submitTopology(args[0], conf, builder.createTopology());
+
+        //StormSubmitter.submitTopology(args[0], conf, builder.createTopology());
+
+        LocalCluster cluster = new LocalCluster();
+        StormTopology topology = builder.createTopology();
+        cluster.submitTopology("demo", conf, topology);
+
+        Utils.sleep(5*60*1000);
     }
 }
