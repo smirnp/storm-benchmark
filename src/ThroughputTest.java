@@ -102,7 +102,7 @@ public class ThroughputTest {
         int spout = Integer.parseInt(args[3]);
         int bolt = Integer.parseInt(args[4]);        
         int maxPending = Integer.parseInt(args[5]);
-        
+          
         TopologyBuilder builder = new TopologyBuilder();
         builder.setSpout("spout", new GenSpout(size), spout);
 //        builder.setBolt("count", new CountBolt(), bolt)
