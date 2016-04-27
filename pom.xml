@@ -4,14 +4,14 @@
   <parent>
     <artifactId>storm</artifactId>
     <groupId>org.apache.storm</groupId>
-    <version>0.10.0</version>
+    <version>1.0.0</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
 
   <groupId>storm</groupId>
   <artifactId>storm-benchmark</artifactId>
   <packaging>jar</packaging>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.0.2-SNAPSHOT</version>
   <name>storm-benchmark</name>
 
   <description/>
@@ -19,8 +19,8 @@
     <dependency>
       <groupId>org.apache.storm</groupId>
       <artifactId>storm-core</artifactId>
-      <version>0.10.0</version>
-      <scope>provided</scope>
+      <version>1.0.0</version>
+      <!--<scope>provided</scope>-->
       <!--<scope>system</scope>-->
       <!--<systemPath>${basedir}/../../storm-core/target/storm-core-2.0.0-SNAPSHOT.jar</systemPath>-->
       <!--<exclusions>-->
@@ -37,6 +37,39 @@
           <!--<artifactId>log4j-slf4j-impl</artifactId>-->
         <!--</exclusion>-->
       <!--</exclusions>-->
+    </dependency>
+    <dependency>
+        <groupId>itmo.escience.storm</groupId>
+        <artifactId>annealingScheduler</artifactId>
+        <version>1.0</version>
+        <!--<scope>provided</scope>-->
+    </dependency>
+    <dependency>
+      <groupId>itmo.escience.dapris.monitoring</groupId>
+      <artifactId>common</artifactId>
+      <version>1.0</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.logging.log4j</groupId>
+          <artifactId>log4j-api</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.logging.log4j</groupId>
+          <artifactId>log4j-core</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.logging.log4j</groupId>
+          <artifactId>log4j-slf4j</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.logging.log4j</groupId>
+          <artifactId>log4j-slf4j-impl</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
