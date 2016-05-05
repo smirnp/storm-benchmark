@@ -20,7 +20,7 @@
       <groupId>org.apache.storm</groupId>
       <artifactId>storm-core</artifactId>
       <version>1.0.0</version>
-      <!--<scope>provided</scope>-->
+      <scope>provided</scope>
       <!--<scope>system</scope>-->
       <!--<systemPath>${basedir}/../../storm-core/target/storm-core-2.0.0-SNAPSHOT.jar</systemPath>-->
       <!--<exclusions>-->
