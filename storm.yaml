@@ -1,2 +1,14 @@
-#storm.scheduler: itmo.escience.storm.annealingScheduler.AnnealingScheduler
+storm.scheduler: itmo.escience.storm.annealingScheduler.AnnealingScheduler
 #storm.scheduler: org.apache.storm.scheduler.resource.ResourceAwareScheduler
+supervisor.slots.ports:
+    - 6700
+supervisor.cpu.capacity: 200
+supervisor.memory.capacity.mb: 9763
+
+
+#topology.component.cpu.pcore.percent: 300
+#topology.component.resources.offheap.memory.mb: 10.0
+#topology.component.resources.onheap.memory.mb: 64.0
+
+topology.worker.max.heap.size.mb: 9763
+

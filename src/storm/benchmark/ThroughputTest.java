@@ -8,11 +8,10 @@ import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
 import org.apache.storm.StormSubmitter;
 import org.apache.storm.generated.StormTopology;
+import org.apache.storm.spout.ISpout;
 import org.apache.storm.spout.SpoutOutputCollector;
 import org.apache.storm.task.TopologyContext;
-import org.apache.storm.topology.BasicOutputCollector;
-import org.apache.storm.topology.OutputFieldsDeclarer;
-import org.apache.storm.topology.TopologyBuilder;
+import org.apache.storm.topology.*;
 import org.apache.storm.topology.base.BaseBasicBolt;
 import org.apache.storm.topology.base.BaseRichSpout;
 import org.apache.storm.tuple.Fields;
@@ -121,7 +120,7 @@ public class ThroughputTest {
 //            tupleStat.host = this.hostname;
 
             //commonMongoClient.saveObjectToDB(ThroughputTest.statsCollection+"."+topoName.split("_")[0], condition, tupleStat);
-            for(int i=0; i<1000; i++)
+            for(int i=0; i<10000; i++)
                 Math.sin(i);
             collector.emit(tuple.getValues());
 
@@ -157,20 +156,34 @@ public class ThroughputTest {
     
     
     //storm jar storm-benchmark-0.0.1-SNAPSHOT-standalone.jar storm.benchmark.ThroughputTest demo 1000000 8 8 8 10000
+    //LocalTopo 15 7 8 5 13 512
     public static void main(String[] args) throws Exception {
         String topoName = args[0]; //+"_"+new Date().getTime();
         int workers = Integer.parseInt(args[1]);
-        int spout = Integer.parseInt(args[2]);
-        int bolt = Integer.parseInt(args[3]);
+        int spoutExecutors = Integer.parseInt(args[2]);
+        int boltExecutors = Integer.parseInt(args[3]);
         int size = Integer.parseInt(args[4]);
+
+        int cpu = Integer.parseInt(args[5]);
+        int memory = Integer.parseInt(args[6]);
 
         //int maxPending = Integer.parseInt(args[5]);
 
         TopologyBuilder builder = new TopologyBuilder();
-        builder.setSpout("spout", new GenSpout(topoName,size), spout);
+
+        //spout.setMemoryLoad(5*memKoef);  //640
+        SpoutDeclarer spoutDeclarer = builder.setSpout("spout", new GenSpout(topoName,size), spoutExecutors);
+        spoutDeclarer.setCPULoad(cpu);
+        spoutDeclarer.setMemoryLoad(memory);
+        //100
        // builder.setBolt("count", new CountBolt(), bolt).shuffleGrouping("spout");
 //                .fieldsGrouping("bolt", new Fields("id"));
-        builder.setBolt("bolt", new IdentityBolt(topoName), bolt).shuffleGrouping("spout");
+
+
+        BoltDeclarer boltDeclarer = builder.setBolt("bolt",new IdentityBolt(topoName), boltExecutors).shuffleGrouping("spout");
+        boltDeclarer.setCPULoad(cpu);
+        boltDeclarer.setMemoryLoad(memory);  //640
+
 //                .shuffleGrouping("spout");
         //builder.setBolt("bolt2", new AckBolt(), bolt).shuffleGrouping("spout");
 //        builder.setBolt("count2", new CountBolt(), bolt)
