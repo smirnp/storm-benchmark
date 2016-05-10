@@ -1,4 +1,4 @@
-storm.scheduler: itmo.escience.storm.annealingScheduler.AnnealingScheduler
+#storm.scheduler: itmo.escience.storm.annealingScheduler.AnnealingScheduler
 #storm.scheduler: org.apache.storm.scheduler.resource.ResourceAwareScheduler
 supervisor.slots.ports:
     - 6700
