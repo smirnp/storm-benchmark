@@ -20,13 +20,12 @@ import java.net.UnknownHostException;
 import java.util.*;
 
 public class DiamondTopology{
-    //LocalTopo -workers=11 -processBolts=4 -spoutExecutors=1 -processBoltExecutors=2 -joinBoltExecutors=1 -tupleSizeBytes=1 -cpu=90 -memory=887
+    
     public static String[] requiredArguments = new String[]{ "workers", "processBolts", "spoutExecutors", "processBoltExecutors", "joinBoltExecutors", "tupleSizeBytes", "cpu", "memory" };
 
 
-    //storm jar storm-benchmark-0.0.1-SNAPSHOT-standalone.jar storm.benchmark.ThroughputTest demo 1000000 8 8 8 10000
-    //LocalTopo -workers=15 -processBolts=2 -spoutExecutors=7 -processBoltExecutors=8 -finalBoltExecutors=8 -tupleSizeBytes=5 -cpu=13 -memory=512
-    //LocalTopo -workers=11 -processBolts=4 -spoutExecutors=1 -processBoltExecutors=2 -joinBoltExecutors=1 -finalBoltExecutors=1 -tupleSizeBytes=1 -cpu=90 -memory=887
+
+    //storm jar ....jar LocalTopo -workers=11 -processBolts=4 -spoutExecutors=1 -processBoltExecutors=2 -joinBoltExecutors=1 -finalBoltExecutors=1 -tupleSizeBytes=1 -cpu=90 -memory=887
     public static void main(String[] args) throws Exception {
 
         String topoName = args[0];
