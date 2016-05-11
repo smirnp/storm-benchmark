@@ -3,12 +3,13 @@ storm.scheduler: org.apache.storm.scheduler.resource.ResourceAwareScheduler
 supervisor.slots.ports:
     - 6700
 supervisor.cpu.capacity: 2000
-supervisor.memory.capacity.mb: 9763
-
+#supervisor.memory.capacity.mb: 9763
+supervisor.memory.capacity.mb: 48815
 
 topology.component.cpu.pcore.percent: 300
 topology.component.resources.offheap.memory.mb: 0.0
 topology.component.resources.onheap.memory.mb: 32.0
 
-topology.worker.max.heap.size.mb: 9763
+#topology.worker.max.heap.size.mb: 9763
+topology.worker.max.heap.size.mb: 48815
 

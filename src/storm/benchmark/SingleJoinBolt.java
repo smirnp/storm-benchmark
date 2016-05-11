@@ -79,7 +79,8 @@ public class SingleJoinBolt extends BaseRichBolt {
                 for(int i=0; i<7000; i++)
                     Math.sin(i);
 
-                _collector.emit(new ArrayList<Tuple>(parts.values()), joinResult);
+                _collector.ack(tuple);
+                //_collector.emit(new ArrayList<Tuple>(parts.values()), joinResult);
 
             }
         }

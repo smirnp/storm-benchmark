@@ -20,9 +20,9 @@ import java.net.UnknownHostException;
 import java.util.*;
 
 public class DiamondTopology{
-    //LocalTopo -workers=15 -processBolts=2 -spoutExecutors=7 -processBoltExecutors=8 -finalBoltExecutors=8 -tupleSizeBytes=5 -cpu=13 -memory=512
-    //LocalTopo -workers=11 -processBolts=4 -spoutExecutors=1 -processBoltExecutors=2 -joinBoltExecutors=1 -finalBoltExecutors=1 -tupleSizeBytes=1 -cpu=90 -memory=887
-    public static String[] requiredArguments = new String[]{ "workers", "processBolts", "spoutExecutors", "processBoltExecutors", "joinBoltExecutors", "finalBoltExecutors", "tupleSizeBytes", "cpu", "memory" };
+    //LocalTopo -workers=15 -processBolts=2 -spoutExecutors=7 -processBoltExecutors=8 -tupleSizeBytes=5 -cpu=13 -memory=512
+    //LocalTopo -workers=11 -processBolts=4 -spoutExecutors=1 -processBoltExecutors=2 -joinBoltExecutors=1 -tupleSizeBytes=1 -cpu=90 -memory=887
+    public static String[] requiredArguments = new String[]{ "workers", "processBolts", "spoutExecutors", "processBoltExecutors", "joinBoltExecutors", "tupleSizeBytes", "cpu", "memory" };
 
 
     //storm jar storm-benchmark-0.0.1-SNAPSHOT-standalone.jar storm.benchmark.ThroughputTest demo 1000000 8 8 8 10000
@@ -93,11 +93,11 @@ public class DiamondTopology{
         //finalBoltDeclarer.setCPULoad(properties.get("finalBoltCPU"));
         //finalBoltDeclarer.setMemoryLoad(properties.get("finalBoltMemory"));
 
-        BoltDeclarer finalBoltDeclarer = builder.setBolt("finalBolt", new AckBolt(), properties.get("finalBoltExecutors")).shuffleGrouping("joinBolt");
-//        for(int i=1; i<=processBolts; i++)
-//            finalBoltDeclarer = finalBoltDeclarer.shuffleGrouping("processBolt"+i);
-        finalBoltDeclarer.setCPULoad(cpu);
-        finalBoltDeclarer.setMemoryLoad(memory);
+//        BoltDeclarer finalBoltDeclarer = builder.setBolt("finalBolt", new AckBolt(), properties.get("finalBoltExecutors")).shuffleGrouping("joinBolt");
+////        for(int i=1; i<=processBolts; i++)
+////            finalBoltDeclarer = finalBoltDeclarer.shuffleGrouping("processBolt"+i);
+//        finalBoltDeclarer.setCPULoad(cpu);
+//        finalBoltDeclarer.setMemoryLoad(memory);
 
         Config conf = new Config();
         conf.setNumWorkers(workers);
