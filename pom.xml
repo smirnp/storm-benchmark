@@ -38,39 +38,7 @@
         <!--</exclusion>-->
       <!--</exclusions>-->
     </dependency>
-    <dependency>
-        <groupId>itmo.escience.storm</groupId>
-        <artifactId>annealingScheduler</artifactId>
-        <version>1.0</version>
-        <!--<scope>provided</scope>-->
-    </dependency>
-    <dependency>
-      <groupId>itmo.escience.dapris.monitoring</groupId>
-      <artifactId>common</artifactId>
-      <version>1.0</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.apache.logging.log4j</groupId>
-          <artifactId>log4j-api</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.apache.logging.log4j</groupId>
-          <artifactId>log4j-core</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.apache.logging.log4j</groupId>
-          <artifactId>log4j-slf4j</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.apache.logging.log4j</groupId>
-          <artifactId>log4j-slf4j-impl</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>log4j</groupId>
-          <artifactId>log4j</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
+
 
     <dependency>
       <groupId>org.slf4j</groupId>

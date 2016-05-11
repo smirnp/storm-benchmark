@@ -1,6 +1,5 @@
 package storm.benchmark;
 
-import itmo.escience.dapris.monitoring.common.CommonMongoClient;
 import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
 import org.apache.storm.StormSubmitter;

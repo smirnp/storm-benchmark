@@ -1,9 +1,5 @@
 package storm.benchmark;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBObject;
-import itmo.escience.dapris.monitoring.common.CommonMongoClient;
-import itmo.escience.dapris.monitoring.common.TupleStat;
 import org.apache.storm.Config;
 import org.apache.storm.LocalCluster;
 import org.apache.storm.StormSubmitter;
@@ -84,7 +80,6 @@ public class ThroughputTest {
         String hostname;
         String componentID;
         String topoName;
-        CommonMongoClient commonMongoClient;
 
         public IdentityBolt(String topoName){
             this.topoName = topoName;

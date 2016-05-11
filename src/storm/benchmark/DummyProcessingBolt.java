@@ -1,6 +1,5 @@
 package storm.benchmark;
 
-import itmo.escience.dapris.monitoring.common.CommonMongoClient;
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.BasicOutputCollector;
 import org.apache.storm.topology.OutputFieldsDeclarer;
