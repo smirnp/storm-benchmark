@@ -1,0 +1,55 @@
+private Queue<Component> bfs(TopologyDetails td, List<Component> spouts) {
+
+        Queue<Component> ordered__Component_list = new LinkedList<Component>();
+        HashMap<String, Component> visited = new HashMap<>();
+
+        /* start from each spout that is not visited, each does a breadth-first traverse */
+        Queue<Component> queue = new LinkedList<>();
+        for (Component spout : spouts) {
+            queue.offer(spout);
+        }
+        while (!queue.isEmpty()) {
+            Component comp = queue.poll();
+            if (!visited.containsKey(comp.id)){
+                visited.put(comp.id, comp);
+                ordered__Component_list.add(comp);
+                List<String> neighbors = new ArrayList<>();
+                neighbors.addAll(comp.children);
+                neighbors.addAll(comp.parents);
+                for (String nbID : neighbors) {
+                    if (!visited.containsKey(nbID)) {
+                        Component child = td.getComponents().get(nbID);
+                        queue.offer(child);
+                    }
+                }
+            }
+        }
+
+//        // Since queue is a interface
+
+        Queue<Component> uncorrect__Component_list = new LinkedList<Component>();
+        visited = new HashMap<>();
+
+        /* start from each spout that is not visited, each does a breadth-first traverse */
+        for (Component spout : spouts) {
+            if (!visited.containsKey(spout.id)) {
+                queue = new LinkedList<>();
+                queue.offer(spout);
+                while (!queue.isEmpty()) {
+                    Component comp = queue.poll();
+                    visited.put(comp.id, comp);
+                    uncorrect__Component_list.add(comp);
+                    List<String> neighbors = new ArrayList<>();
+                    neighbors.addAll(comp.children);
+                    neighbors.addAll(comp.parents);
+                    for (String nbID : neighbors) {
+                        if (!visited.containsKey(nbID)) {
+                            Component child = td.getComponents().get(nbID);
+                            queue.offer(child);
+                        }
+                    }
+                }
+            }
+        }
+        return ordered__Component_list;
+    }

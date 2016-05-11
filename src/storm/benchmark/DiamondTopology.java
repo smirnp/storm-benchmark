@@ -20,7 +20,6 @@ import java.net.UnknownHostException;
 import java.util.*;
 
 public class DiamondTopology{
-    //LocalTopo -workers=15 -processBolts=2 -spoutExecutors=7 -processBoltExecutors=8 -tupleSizeBytes=5 -cpu=13 -memory=512
     //LocalTopo -workers=11 -processBolts=4 -spoutExecutors=1 -processBoltExecutors=2 -joinBoltExecutors=1 -tupleSizeBytes=1 -cpu=90 -memory=887
     public static String[] requiredArguments = new String[]{ "workers", "processBolts", "spoutExecutors", "processBoltExecutors", "joinBoltExecutors", "tupleSizeBytes", "cpu", "memory" };
 
@@ -46,14 +45,6 @@ public class DiamondTopology{
         int spoutExecutors = properties.get("spoutExecutors");
         int processBolts = properties.get("processBolts");
 
-//        int leftBoltExecutors = properties.get("leftBoltExecutors");
-//        int leftBoltCpu = properties.get("leftBoltCpu");
-//        int leftBoltMemory = properties.get("leftBoltMemory");
-//
-//        int rightBoltExecutors = properties.get("rightBoltExecutors");
-//        int leftBoltCpu = properties.get("rightBoltCpu");
-//        int leftBoltMemory = properties.get("leftBoltMemory");
-
         int tupleSizeBytes = properties.get("tupleSizeBytes");
         int cpu = properties.get("cpu");
         int memory = properties.get("memory");
@@ -76,12 +67,6 @@ public class DiamondTopology{
             processBoltXDeclarer.setCPULoad(cpu);
             processBoltXDeclarer.setMemoryLoad(memory);
             processFields[i]="p"+i;
-//        BoltDeclarer processBoltYDeclarer = builder.setBolt("processBoltY", new DummyProcessingBolt(new Fields("id", "y"), tupleSizeBytes), properties.get("processBoltExecutors")).fieldsGrouping("spout", new Fields("size"));
-//        processBoltYDeclarer.setCPULoad(cpu);
-//        processBoltYDeclarer.setMemoryLoad(memory);
-
-            //processBoltDeclarer.setCPULoad(properties.get("processBolt"+i+"Cpu"));
-            //processBoltDeclarer.setMemoryLoad(properties.get("processBolt"+i+"Memory"));
         }
 
         BoltDeclarer joinBoltDeclarer = builder.setBolt("joinBolt", new SingleJoinBolt(new Fields(processFields), tupleSizeBytes), properties.get("joinBoltExecutors"));//.fieldsGrouping("processBoltX", new Fields("id")).fieldsGrouping("processBoltY", new Fields("id"));
@@ -90,14 +75,6 @@ public class DiamondTopology{
 
         joinBoltDeclarer.setCPULoad(cpu);
         joinBoltDeclarer.setMemoryLoad(memory);
-        //finalBoltDeclarer.setCPULoad(properties.get("finalBoltCPU"));
-        //finalBoltDeclarer.setMemoryLoad(properties.get("finalBoltMemory"));
-
-//        BoltDeclarer finalBoltDeclarer = builder.setBolt("finalBolt", new AckBolt(), properties.get("finalBoltExecutors")).shuffleGrouping("joinBolt");
-////        for(int i=1; i<=processBolts; i++)
-////            finalBoltDeclarer = finalBoltDeclarer.shuffleGrouping("processBolt"+i);
-//        finalBoltDeclarer.setCPULoad(cpu);
-//        finalBoltDeclarer.setMemoryLoad(memory);
 
         Config conf = new Config();
         conf.setNumWorkers(workers);
