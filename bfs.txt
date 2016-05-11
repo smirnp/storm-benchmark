@@ -1,5 +1,6 @@
 private Queue<Component> bfs(TopologyDetails td, List<Component> spouts) {
 
+//fixed
         Queue<Component> ordered__Component_list = new LinkedList<Component>();
         HashMap<String, Component> visited = new HashMap<>();
 
@@ -25,7 +26,7 @@ private Queue<Component> bfs(TopologyDetails td, List<Component> spouts) {
             }
         }
 
-//        // Since queue is a interface
+//original one
 
         Queue<Component> uncorrect__Component_list = new LinkedList<Component>();
         visited = new HashMap<>();

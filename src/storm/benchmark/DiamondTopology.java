@@ -20,7 +20,7 @@ import java.net.UnknownHostException;
 import java.util.*;
 
 public class DiamondTopology{
-    
+
     public static String[] requiredArguments = new String[]{ "workers", "processBolts", "spoutExecutors", "processBoltExecutors", "joinBoltExecutors", "tupleSizeBytes", "cpu", "memory" };
 
 
