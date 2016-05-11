@@ -18,15 +18,17 @@ public class GenSpout extends BaseRichSpout {
     private int tuplesCounter = 0;
     SpoutOutputCollector _collector;
     int _size;
-    int _koef = 0;
+    int _koef = 1;
+    int _processBolts = 0;
     Random _rand;
     int _id;
     String _val;
     private Fields _outFields;
 
-    public GenSpout(Fields outFields, int size) {
+    public GenSpout(Fields outFields, int processBolts, int size) {
         _size = size;
         _outFields = outFields;
+        _processBolts = processBolts;
     }
 
     @Override
@@ -38,11 +40,14 @@ public class GenSpout extends BaseRichSpout {
     @Override
     public void nextTuple() {
         tuplesCounter++;
-        _koef = 1 -_koef ;
-        int tupleSize = (_koef+1)* 5 * _size;
+
+        int tupleSize = _koef * 5 * _size;
+
         _val = randString(tupleSize);
         _collector.emit(new Values(tuplesCounter, tupleSize, _val));
-
+        _koef++;
+        if(_koef >_processBolts)
+            _koef=1;
     }
 
     private String randString(int size) {

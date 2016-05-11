@@ -21,11 +21,13 @@ import java.util.*;
 
 public class DiamondTopology{
     //LocalTopo -workers=15 -processBolts=2 -spoutExecutors=7 -processBoltExecutors=8 -finalBoltExecutors=8 -tupleSizeBytes=5 -cpu=13 -memory=512
+    //LocalTopo -workers=11 -processBolts=4 -spoutExecutors=1 -processBoltExecutors=2 -joinBoltExecutors=1 -finalBoltExecutors=1 -tupleSizeBytes=1 -cpu=90 -memory=887
     public static String[] requiredArguments = new String[]{ "workers", "processBolts", "spoutExecutors", "processBoltExecutors", "joinBoltExecutors", "finalBoltExecutors", "tupleSizeBytes", "cpu", "memory" };
 
 
     //storm jar storm-benchmark-0.0.1-SNAPSHOT-standalone.jar storm.benchmark.ThroughputTest demo 1000000 8 8 8 10000
     //LocalTopo -workers=15 -processBolts=2 -spoutExecutors=7 -processBoltExecutors=8 -finalBoltExecutors=8 -tupleSizeBytes=5 -cpu=13 -memory=512
+    //LocalTopo -workers=11 -processBolts=4 -spoutExecutors=1 -processBoltExecutors=2 -joinBoltExecutors=1 -finalBoltExecutors=1 -tupleSizeBytes=1 -cpu=90 -memory=887
     public static void main(String[] args) throws Exception {
 
         String topoName = args[0];
@@ -42,7 +44,6 @@ public class DiamondTopology{
 
         int workers = properties.get("workers");
         int spoutExecutors = properties.get("spoutExecutors");
-
         int processBolts = properties.get("processBolts");
 
 //        int leftBoltExecutors = properties.get("leftBoltExecutors");
@@ -62,29 +63,31 @@ public class DiamondTopology{
         TopologyBuilder builder = new TopologyBuilder();
 
         //spout.setMemoryLoad(5*memKoef);  //640
-        SpoutDeclarer spoutDeclarer = builder.setSpout("spout", new GenSpout(new Fields("id","size","text"), tupleSizeBytes), spoutExecutors);
+        SpoutDeclarer spoutDeclarer = builder.setSpout("spout", new GenSpout(new Fields("id","size","text"), processBolts, tupleSizeBytes), spoutExecutors);
         spoutDeclarer.setCPULoad(cpu);
         spoutDeclarer.setMemoryLoad(memory);
         //100
         // builder.setBolt("count", new CountBolt(), bolt).shuffleGrouping("spout");
 //                .fieldsGrouping("bolt", new Fields("id"));
-
-        //for(int i=1; i<=processBolts; i++) {
-        BoltDeclarer processBoltXDeclarer = builder.setBolt("processBoltX", new DummyProcessingBolt(new Fields("id", "x"), tupleSizeBytes), properties.get("processBoltExecutors")).fieldsGrouping("spout", new Fields("size"));
-        processBoltXDeclarer.setCPULoad(cpu);
-        processBoltXDeclarer.setMemoryLoad(memory);
-
-        BoltDeclarer processBoltYDeclarer = builder.setBolt("processBoltY", new DummyProcessingBolt(new Fields("id", "y"), tupleSizeBytes), properties.get("processBoltExecutors")).fieldsGrouping("spout", new Fields("size"));
-        processBoltYDeclarer.setCPULoad(cpu);
-        processBoltYDeclarer.setMemoryLoad(memory);
+        String[] processFields = new String[processBolts+1];
+        processFields[0]="id";
+        for(int i=1; i<=processBolts; i++){
+            BoltDeclarer processBoltXDeclarer = builder.setBolt("processBolt_"+i, new DummyProcessingBolt(new Fields("id", "p"+i), tupleSizeBytes), properties.get("processBoltExecutors")).fieldsGrouping("spout", new Fields("size"));
+            processBoltXDeclarer.setCPULoad(cpu);
+            processBoltXDeclarer.setMemoryLoad(memory);
+            processFields[i]="p"+i;
+//        BoltDeclarer processBoltYDeclarer = builder.setBolt("processBoltY", new DummyProcessingBolt(new Fields("id", "y"), tupleSizeBytes), properties.get("processBoltExecutors")).fieldsGrouping("spout", new Fields("size"));
+//        processBoltYDeclarer.setCPULoad(cpu);
+//        processBoltYDeclarer.setMemoryLoad(memory);
 
             //processBoltDeclarer.setCPULoad(properties.get("processBolt"+i+"Cpu"));
             //processBoltDeclarer.setMemoryLoad(properties.get("processBolt"+i+"Memory"));
-        //}
+        }
 
-        BoltDeclarer joinBoltDeclarer = builder.setBolt("joinBolt", new SingleJoinBolt(new Fields("id", "x", "y"), tupleSizeBytes), properties.get("joinBoltExecutors")).fieldsGrouping("processBoltX", new Fields("id")).fieldsGrouping("processBoltY", new Fields("id"));
-//        for(int i=1; i<=processBolts; i++)
-//            finalBoltDeclarer = finalBoltDeclarer.shuffleGrouping("processBolt"+i);
+        BoltDeclarer joinBoltDeclarer = builder.setBolt("joinBolt", new SingleJoinBolt(new Fields(processFields), tupleSizeBytes), properties.get("joinBoltExecutors"));//.fieldsGrouping("processBoltX", new Fields("id")).fieldsGrouping("processBoltY", new Fields("id"));
+        for(int i=1; i<=processBolts; i++)
+           joinBoltDeclarer = joinBoltDeclarer.fieldsGrouping("processBolt_"+i, new Fields("id"));
+
         joinBoltDeclarer.setCPULoad(cpu);
         joinBoltDeclarer.setMemoryLoad(memory);
         //finalBoltDeclarer.setCPULoad(properties.get("finalBoltCPU"));

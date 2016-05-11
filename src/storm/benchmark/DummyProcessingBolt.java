@@ -47,7 +47,7 @@ public class DummyProcessingBolt extends BaseBasicBolt {
         else
             koef = 5;
 
-        for(int i=0; i<koef*2000; i++)
+        for(int i=0; i<10000; i++)
             Math.sin(i);
 
         int tupleSize = koef * _size;
